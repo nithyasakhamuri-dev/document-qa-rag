@@ -1,7 +1,8 @@
 # Document Q&A using RAG
 A web app that answers questions from an uploaded PDF or text file using Retrieval Augmented Generation (RAG). Each answer is shown with the source passages it came from.
+
 Built during my Generative AI with LLMs internship at SkillDzire (Apr–Jun 2026).
-![Screenshot](screenshot.png)
+
 ## How it works
 1. **Load**: reads the uploaded PDF/TXT (pypdf).
 2. **Chunk**: splits text into 80-word chunks with 20 words of overlap.
@@ -9,6 +10,7 @@ Built during my Generative AI with LLMs internship at SkillDzire (Apr–Jun 2026
 4. **Retrieve**: cosine similarity picks the top 3 chunks. If nothing matches, the app says so instead of guessing.
 5. **Generate**: the chunks and the question go to the Gemini API with an instruction to answer only from the context.
 6. **Show**: the answer and the source passages with their scores.
+![Screenshot](screenshot.png)
 
 ## Tech stack
 Python, Flask, pypdf, Gemini API, HTML/JavaScript
