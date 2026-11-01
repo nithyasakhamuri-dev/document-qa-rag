@@ -1,4 +1,4 @@
-"""app.py - Flask web app for Document Q&A using RAG."""
+
 import os
 
 from flask import Flask, jsonify, render_template, request

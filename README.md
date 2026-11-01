@@ -1,43 +1,40 @@
-# Document Q&A using RAG (Flask)
+# Document Q&A using RAG
+![Screenshot](screenshot.png)
+A web app that answers questions from an uploaded PDF or text file using Retrieval Augmented Generation (RAG). Each answer is shown with the source passages it came from.
 
-Upload a PDF or TXT file and ask questions about it. The app finds the most relevant
-passages in the document and sends them to an LLM (Google Gemini), which writes the answer.
-
-## Files
-| File | Job |
-|---|---|
-| `rag.py` | The RAG pipeline: load, chunk, TF-IDF vectors, cosine-similarity retrieval, LLM call |
-| `app.py` | Flask routes: `/` page, `/upload` file, `/ask` question |
-| `templates/index.html` | The web page (upload box, question box, answer + source passages) |
-| `sample.txt` | A small test document about RAG |
-
-## How to run (Windows; macOS/Linux commands are in brackets)
-1. Install Python 3.9+ and open a terminal **inside this folder**
-   (VS Code: File > Open Folder, then Terminal > New Terminal).
-2. Install the libraries (one time):
-   `pip install -r requirements.txt`
-3. Get a free API key at https://aistudio.google.com/app/apikey, then set it in the same terminal:
-   - Command Prompt: `set GEMINI_API_KEY=your_key_here`
-   - PowerShell: `$env:GEMINI_API_KEY="your_key_here"`
-   - [macOS/Linux: `export GEMINI_API_KEY=your_key_here`]
-4. Start the app: `python app.py`
-5. Open http://127.0.0.1:5000 in your browser, upload `sample.txt`, and ask
-   "What is RAG?" or "Why does chunk overlap help?"
-
-Without an API key the app still works: it shows the best-matching passages instead of a generated answer.
-
-If you get a "model not found" error, set another model name:
-`set GEMINI_MODEL=gemini-2.5-flash-lite` (use `export` on macOS/Linux).
+Built during my Generative AI with LLMs internship at SkillDzire (Apr–Jun 2026).
 
 ## How it works
-1. **Load**: read text from the PDF/TXT (`load_text`)
-2. **Chunk**: split into overlapping 80-word passages (`chunk_text`)
-3. **Vectorize**: TF-IDF turns each chunk into a vector (`DocumentIndex`)
-4. **Store**: the vectors are kept in memory in `DocumentIndex.matrix`
-5. **Retrieve**: the question is vectorized the same way; cosine similarity picks the top 3 chunks (`search`)
-6. **Answer**: the chunks plus the question go into a prompt, and Gemini answers using only that context (`ask_llm`)
+1. **Load**: reads the uploaded PDF/TXT (pypdf).
+2. **Chunk**: splits text into 80-word chunks with 20 words of overlap.
+3. **Vectorise**: TF-IDF vectors, written in plain Python (no ML libraries).
+4. **Retrieve**: cosine similarity picks the top 3 chunks. If nothing matches, the app says so instead of guessing.
+5. **Generate**: the chunks and the question go to the Gemini API with an instruction to answer only from the context.
+6. **Show**: the answer and the source passages with their scores.
 
-## Ideas to extend
-- Replace TF-IDF with an embedding model for meaning-based matching
-- Keep several documents and a persistent vector store
-- Show chat history
+## Tech stack
+Python, Flask, pypdf, Gemini API, HTML/JavaScript
+
+## Run it
+```bash
+pip install -r requirements.txt
+set GEMINI_API_KEY=your-key        # Windows PowerShell: $env:GEMINI_API_KEY="your-key"
+python app.py
+```
+Open http://127.0.0.1:5000, upload `sample.txt` and ask: "Why does chunk overlap help?"
+
+Optional: choose another model with the `GEMINI_MODEL` environment variable.
+
+## Features
+- Answers grounded in the document, with visible sources
+- Retry on busy API errors (429/500/503) and a fallback model
+- Retrieval implemented from scratch (TF-IDF + cosine similarity)
+
+## Limitations
+- TF-IDF matches words, not meaning; embeddings would improve this
+- One document at a time; the index is kept in memory
+
+## Files
+- `app.py`: Flask routes (`/`, `/upload`, `/ask`)
+- `rag.py`: the RAG pipeline
+- `templates/index.html`: the web page
