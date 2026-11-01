@@ -1,9 +1,7 @@
 # Document Q&A using RAG
-![Screenshot](screenshot.png)
 A web app that answers questions from an uploaded PDF or text file using Retrieval Augmented Generation (RAG). Each answer is shown with the source passages it came from.
-
 Built during my Generative AI with LLMs internship at SkillDzire (Apr–Jun 2026).
-
+![Screenshot](screenshot.png)
 ## How it works
 1. **Load**: reads the uploaded PDF/TXT (pypdf).
 2. **Chunk**: splits text into 80-word chunks with 20 words of overlap.
