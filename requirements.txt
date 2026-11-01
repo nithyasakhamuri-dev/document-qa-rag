@@ -1,0 +1,4 @@
+flask
+pypdf
+scikit-learn
+requests

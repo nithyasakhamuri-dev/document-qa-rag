@@ -1,0 +1,7 @@
+Retrieval Augmented Generation, or RAG, is a technique that combines a search step with a large language model. A plain LLM only knows what it learned during training, so it cannot answer questions about your private documents. RAG fixes this by retrieving relevant passages from your documents and giving them to the model along with the question.
+
+The RAG pipeline has two phases. In the indexing phase, a document is loaded and split into small chunks. Each chunk is converted into a numeric vector. The vectors are stored in a vector store. In the query phase, the user's question is converted into a vector in the same way. The system compares the question vector with the stored chunk vectors using cosine similarity and picks the closest chunks. These chunks are placed into a prompt, and the language model writes the final answer using only that context.
+
+Chunk size matters. Very large chunks contain too much unrelated text, while very small chunks lose meaning. Overlap between chunks helps keep sentences that fall on a boundary. TF-IDF is a simple way to vectorize text by weighting words that are frequent in a chunk but rare across all chunks. Embedding models give richer vectors that capture meaning, so they can match a question and a passage even when they share no exact words.
+
+Flask is a lightweight Python web framework. In this project Flask serves an HTML page, receives the uploaded file and the user's question through routes, runs the RAG pipeline, and returns the answer as JSON.
